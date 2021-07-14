@@ -26,13 +26,12 @@ func outFile(fx []string) func() *os.File {
 
 	useStdout := len(fx) <= 0
 	next := 0
-	ofx := fx
 	return func() *os.File {
 		if useStdout {
 			return os.Stdout
 		}
 		var err error
-		f, err := os.OpenFile(ofx[next], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
+		f, err := os.OpenFile(fx[next], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
 		if err != nil {
 			log.Fatal("Error during file open: ", err)
 		}
