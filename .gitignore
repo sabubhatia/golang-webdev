@@ -16,3 +16,6 @@
 
 #output directory contents
 tmp/**
+
+#mac utility files
+.DS_Store
