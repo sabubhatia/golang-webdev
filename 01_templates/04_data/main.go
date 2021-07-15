@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"strings"
+
 	"github.com/sabubhatia/golang-webdev/01_templates/utility/filelist"
 )
 
@@ -28,7 +29,18 @@ func main() {
 		}
 	}
 
+	getFile := filelist.FileList(ofx)
 	for _, t := range tpl.Templates() {
-		t.ExecuteTemplate(f, t.Name(), "Meaning of life is 42")
+		f := getFile()
+		defer func() {
+			if f != os.Stdout {
+				log.Printf("Closing: %p, %v, %v\n", f, *f, f.Name())
+				f.Close()
+			}
+		}()
+		err := t.ExecuteTemplate(f, tpl.Name(), "Meaning of life is 42")
+		if err != nil {
+			log.Fatal("Unable to execute template", err)
+		}
 	}
 }
