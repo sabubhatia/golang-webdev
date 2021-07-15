@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"text/template"
+	"github.com/sabubhatia/golang-webdev/01_templates/utility/filelist"
 )
 
 var tpl *template.Template
@@ -50,7 +51,7 @@ func main() {
 		}
 	}
 
-	getFile := outFile(ofx)
+	getFile := filelist.FileList(ofx)
 	for _, t := range tpl.Templates() {
 		f := getFile()
 		defer func() {
