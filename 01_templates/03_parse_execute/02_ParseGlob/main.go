@@ -21,7 +21,7 @@ func init() {
 
 func outFile(fx []string) func() *os.File {
 
-	// If no files are in fx return os.Stdout. Else keep returning teh next file in the list till
+	// If no files are in fx return os.Stdout. Else keep returning the next file in the list till
 	// the end OF LIST IS HIT.
 
 	useStdout := len(fx) <= 0
