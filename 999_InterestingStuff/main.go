@@ -3,9 +3,9 @@
 // closures capture variables by reference. This example is from
 // https://stackoverflow.com/questions/19957323/go-closure-variable-scope
 
-package main 
-import "fmt"
+package main
 
+import "fmt"
 
 func makeIterator(sx []string) func() func() string {
 

@@ -12,7 +12,7 @@ import (
 var tpl *template.Template
 
 func init() {
-	if len (os.Args) < 2 {
+	if len(os.Args) < 2 {
 		log.Fatal("Expected at least 2 args got ", len(os.Args))
 	}
 	tpl = template.Must(template.ParseGlob(os.Args[1]))

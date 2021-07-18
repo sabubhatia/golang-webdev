@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> Sages - VAR </title>
+</head>
+<body>
+<p1> Sages using a variable in range: </p1>
+<ol>
+    {{range $index, $element := .}}
+        <li> {{$index}} - {{$element}} </li>
+    {{end}}
+</ol>
+</body>
+</html>

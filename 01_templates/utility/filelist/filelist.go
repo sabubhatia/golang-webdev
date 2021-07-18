@@ -5,7 +5,6 @@ import (
 	"os"
 )
 
-
 func FileList(fx []string) func() *os.File {
 
 	// If no files are in fx return os.Stdout. Else keep returning the next file in the list till

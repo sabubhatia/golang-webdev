@@ -7,22 +7,22 @@ import (
 	"text/template"
 )
 
-func main()  {
+func main() {
 	if len(os.Args) < 2 {
 		log.Fatal("Expected 2 arguments got ", len(os.Args))
 	}
 	fx := strings.Split(os.Args[1], ",")
 	tpl, err := template.ParseFiles(fx...)
 	if err != nil {
-		log.Fatal("Error during parse files: ", err)	
+		log.Fatal("Error during parse files: ", err)
 	}
 
-	var ofx [] string
-    if len(os.Args) > 2 {
+	var ofx []string
+	if len(os.Args) > 2 {
 		ofx = strings.Split(os.Args[2], ",")
 	}
 
-	if len(ofx) <  len(fx) {
+	if len(ofx) < len(fx) {
 		log.Fatal("Expetced writers to equal readers got: ", len(ofx), len(fx))
 	}
 
@@ -32,7 +32,7 @@ func main()  {
 	}
 
 	for i, t := range tpl.Templates() {
-		f, err := os.OpenFile(ofx[i], os.O_WRONLY | os.O_CREATE | os.O_TRUNC, 0755)
+		f, err := os.OpenFile(ofx[i], os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
 		if err != nil {
 			log.Fatal("Unable to open file for output: ", ofx[i], err)
 		}
@@ -41,7 +41,7 @@ func main()  {
 		if err != nil {
 			log.Fatal(tpl.DefinedTemplates(), "\nUnable to execute template ", t.Name(), err)
 		}
-		// f.Close() 
+		// f.Close()
 	}
 
 	log.Println(tpl.DefinedTemplates())

@@ -1,11 +1,11 @@
 package main
 
 import (
+	"github.com/sabubhatia/golang-webdev/01_templates/utility/filelist"
 	"log"
 	"os"
 	"strings"
 	"text/template"
-	"github.com/sabubhatia/golang-webdev/01_templates/utility/filelist"
 )
 
 var tpl *template.Template
