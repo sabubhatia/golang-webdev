@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> StructWithX </title>
+</head>
+{{$people := .People}}
+{{$dom := .Domiciles}}
+<p1> This is a struct with two slices </p1>
+<ul>
+    {{range $i, $p := $people}}
+        {{$d := index $dom $i }}
+        <li> {{$p.Fname}}, {{$p.Lname}} lives in {{$d.City}}, {{$d.Country}} </li>
+    {{end}}
+</ul>
+<body>
+</body>
+</html>

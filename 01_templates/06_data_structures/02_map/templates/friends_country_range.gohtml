@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> Friends & Country </title>
+</head>
+<body>
+<p1> My firends in SG and countries they are from </p1>
+<ul>
+    {{range $key, $value := .}}
+        <li> {{$key}} - {{$value}}</li>
+    {{end}}
+</ul>
+</body>
+</html>

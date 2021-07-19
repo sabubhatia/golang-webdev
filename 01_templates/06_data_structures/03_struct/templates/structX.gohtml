@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> structX </titLe>
+</head>
+<body>
+<p1> This is a slice of struct </p1>
+<ul>
+    {{range .}}
+        <li> {{.}} </li>
+    {{end}}
+</ul>
+<p1> This too is a slice of struct with field names accessed individually </p1>
+<ul>
+    {{range .}} 
+        <li> {{.Fname}}, {{.Lname}} </li>
+    {{end}}
+</ul>
+</body>
+</html>
