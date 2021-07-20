@@ -4,7 +4,8 @@ import (
 	"html/template"
 	"log"
 	"os"
-	"strings"
+
+	"github.com/sabubhatia/golang-webdev/01_templates/utility/fileutil"
 )
 
 type person struct {
@@ -28,7 +29,7 @@ func init() {
 	tpl = template.Must(template.ParseGlob(os.Args[1]))
 	log.Println(tpl.DefinedTemplates())
 
-	// set the path from teh environment.
+	// set the path from the environment.
 	if len(os.Args) == 2 {
 		return
 	}
@@ -58,9 +59,9 @@ func executeStruct(tName string) {
 		Lname: "Bhatia",
 	}
 
-	f := outF(tName)
+	f := fileutil.OutF(path, tName)
 	log.Printf("Will write too: %p, %v, %s", f, *f, f.Name())
-	defer closeF(f)
+	defer fileutil.CloseF(f)
 	err := tpl.ExecuteTemplate(f, tName, me)
 	if err != nil {
 		log.Fatal("Unable to execute template struct.gohtml ", err)
@@ -70,9 +71,9 @@ func executeStruct(tName string) {
 func executeXStruct(tName string) {
 	px := personX()
 
-	f := outF(tName)
+	f := fileutil.OutF(path, tName)
 	log.Printf("Will write too: %p, %v, %s", f, *f, f.Name())
-	defer closeF(f)
+	defer fileutil.CloseF(f)
 	err := tpl.ExecuteTemplate(f, tName, px)
 	if err != nil {
 		log.Fatal("Unable to execute template structX.gohtml ", err)
@@ -92,40 +93,13 @@ func executeStructWithX(tName string) {
 		log.Fatalf("Expected #people %d to equial %d #domiciles ", len(s.People), len(s.Domiciles))
 	}
 
-	f := outF(tName)
+	f := fileutil.OutF(path, tName)
 	log.Printf("Will write too: %p, %v, %s", f, *f, f.Name())
-	defer closeF(f)
+	defer fileutil.CloseF(f)
 	err := tpl.ExecuteTemplate(f, tName, s)
 	if err != nil {
 		log.Fatal("Unable to execute template structWithX.gohtml ", err)
 	}
-}
-
-func outF(tn string) *os.File {
-	if len(path) < 1 {
-		return os.Stdout
-	}
-
-	sx := strings.Split(tn, ".")
-	if len(sx) != 2 {
-		log.Panicf("Expected %s to split into 2 but got: %d", tn, len(sx))
-	}
-	fn := strings.Join([]string{path, sx[0]}, "")
-	fn = strings.Join([]string{fn, "html"}, ".")
-	f, err := os.OpenFile(fn, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0755)
-	if err != nil {
-		log.Panic("Unable to open: ", fn, " ", err)
-	}
-	return f
-}
-
-func closeF(f *os.File) {
-	if f == os.Stdout {
-		return
-	}
-
-	log.Printf("Closing: %p, %v, %s", f, *f, f.Name())
-	f.Close()
 }
 
 func personX() *[]person {
