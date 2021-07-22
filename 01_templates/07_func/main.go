@@ -39,7 +39,7 @@ func init() {
 
 func main() {
 
-	for _, t := range tpl.Templates()  {
+	for _, t := range tpl.Templates() {
 		if strings.Compare(t.Name(), rootT) == 0 { // skip the dummy root
 			continue
 		}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title> Numbers Magic </title>
+</head>
+<body>
+<p1> This is my numbers magic using functions in templates</p1>
+<li> Passed value: {{.}} </li>
+<li> Doubled: {{fdbl .}} </li>
+<li> Squared: {{fsqr .}} </li>
+<li> Sqrt: {{fsqrt . | printf ("%.4f")}} </li>
+
+<li> Doubled, Sqr, Sqrt: {{fdbl . | fsqr | fsqrt | printf "Value = %v" }}
+</html>
