@@ -1,0 +1,28 @@
+{{define "Courses"}}
+{{if (and (and .Term .Year)  (.Courses))}}
+    <h2> Courses for Term {{.Term}}, Year: {{.Year}} </h2>
+     {{range .Courses}}
+        {{.Number}}: {{.Name}} [{{.Units}}] <br>
+     {{end}}
+{{end}}
+{{end}}
+
+{{define "SchoolYear"}}
+    {{template "Courses" .Fall}}
+    {{template "Courses" .Spring}}
+    {{template "Courses" .Summer}}
+{{end}}
+
+{{define "Schedule"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF=8">
+    <title> Courses </title>
+</head>
+<body>
+    <h1> Course schedule for Fordham University </h1>
+    {{template "SchoolYear" .}}
+</body>
+</html>
+{{end}}
