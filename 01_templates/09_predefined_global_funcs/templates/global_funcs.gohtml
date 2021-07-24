@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Global Functions </title>
+</head>
+<body>
+    <p1> This is what you passed me </p1>
+     <li> {{.}} </li>
+    <p1> Sages and quotes <p1>
+    <ul>
+        {{range $k, $v := .Sages}}
+          <li> {{$k}} - {{$v}} </li>
+        {{end}}
+    </ul>
+      <p1> Sages and quotes print quotes(s) of Nanak </p1>
+    <ul>
+        {{range $k, $v := .Sages}}
+         {{if eq $k "Nanak"}}
+            <li> {{.}} </li>
+          {{end}}
+        {{end}}
+    </ul>
+    <p1> Countries other than India </p1>
+    <ul>
+        {{range .Countries}}
+            {{if ne . "India"}}
+               <li> {{printf "%s is not India" .}} </li>
+            {{end}}
+        {{end}}
+    </ul>
+    <p1> Randomn stuff that is there </p1>
+        {{range .Dumb}}
+            {{if .}}
+                <li> {{. | printf "[%s]"}} </li>
+            {{else}}    
+                <li> {{printf "**EMPTY**"}} </li>
+            {{end}}
+        {{end}}
+     <p1> First two countries in the list: </p1>
+         {{ range slice .Countries 0 2 }} 
+            <li> {{.}} </li>
+         {{end}}
+</body>
+</html>
