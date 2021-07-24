@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+
 func OutF(path, tn string) *os.File {
 	if len(path) < 1 {
 		return os.Stdout
@@ -13,7 +14,7 @@ func OutF(path, tn string) *os.File {
 
 	sx := strings.Split(tn, ".")
 	if len(sx) != 2 {
-		log.Panicf("Expected %s to split into 2 but got: %d", tn, len(sx))
+		log.Printf("Expected %s to split into 2 but got: %d", tn, len(sx))
 	}
 	fn := strings.Join([]string{path, sx[0]}, "")
 	fn = strings.Join([]string{fn, "html"}, ".")
