@@ -1,0 +1,30 @@
+{{define "One"}}
+<li> 1 </li>
+{{end}}
+{{define "Two"}}
+<li> 2 </li>
+{{end}}
+{{define "Three"}}
+<li> 3 </li>
+{{end}}
+{{define "Four"}}
+<li> 4 </li>
+{{end}}
+{{define "Index"}}
+<p1> Index: </p1>
+{{template "One"}}
+{{template "Two"}}
+{{template "Three"}}
+{{template "Four"}}
+{{end}}
+{{define "Odd"}}
+<p1> Odd: </p1>
+{{template "One"}}
+{{template "Three"}}
+{{end}}
+{{define "Even"}}
+<p1> Even: </p1>
+{{template "Two"}}
+{{template "Four"}}
+{{end}}
+
