@@ -1,0 +1,22 @@
+{{define "Methods"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Methods </title>
+</head>
+<body>
+    <p> Passed in name is <b>{{.Name}}</b>. 
+        {{if .IsMale}}
+            He
+        {{else}}
+            She
+        {{end}}
+         is <b>{{.Age}}</b> years old
+    </p>
+    <p> <b>{{.Name}}'s</b> doubled age is <b>{{.DblAge}}</b></p>
+    {{$n := "Phengvanh Khounnhoth"}}
+    <p> Changing <b>{{.Name}}'s</b> name to <b><i>{{$n | .NameChange}}</i></b> </p>
+    <p> Changed name is <b><i>{{.Name}}</i></b></p>
+</html>
+{{end}}
