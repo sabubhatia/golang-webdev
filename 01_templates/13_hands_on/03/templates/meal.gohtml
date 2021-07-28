@@ -1,0 +1,29 @@
+{{define "Restaurant"}}
+<h1> <u> {{.}} </u> </h1>
+{{end}}
+
+{{define "Meal"}}
+<h2> {{.Name}} </h2>
+{{range .Items}}
+    <b>{{.Name}}</b> <b><i>${{.Price}} </i></b> <br>
+    <i>{{.Description}}</i> <br>
+{{end}}
+{{end}}
+
+
+{{define "Menus"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+
+<body>
+{{range .}}
+    {{template "Restaurant" .Restaurant}}
+    {{template "Meal" .Breakfast}}
+    {{template "Meal" .Lunch}}
+    {{template "Meal" .Dinner}}
+{{end}}
+</body>
+</html>
+{{end}}

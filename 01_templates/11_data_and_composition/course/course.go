@@ -1,27 +1,26 @@
 package course
 
 type course struct {
-	Number string 
-	Name string
-	Units uint8
+	Number string
+	Name   string
+	Units  uint8
 }
 
 type semester struct {
-	Term string
-	Year uint16
+	Term    string
+	Year    uint16
 	Courses []course
 }
 
 type year struct {
-	Fall semester 
-	Spring semester 
+	Fall   semester
+	Spring semester
 	Summer semester
 }
 
-
 func GetCourses(yr uint16) *year {
-	y := year {
-		Fall: semester {
+	y := year{
+		Fall: semester{
 			Term: "Fall",
 			Year: yr,
 			Courses: []course{
@@ -40,7 +39,7 @@ func GetCourses(yr uint16) *year {
 				{"CS-02-2", "Advanced Operating Systems", 4},
 				{"CS-03-2", "Advanced Compilers", 4},
 				{"CS-04-2", "Advanced Computer Architecture", 4},
-				{"CS-05-2", "Theory of Computer Science Part 2", 4},	
+				{"CS-05-2", "Theory of Computer Science Part 2", 4},
 			},
 		},
 	}

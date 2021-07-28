@@ -1,0 +1,40 @@
+{{define "Hotels"}}
+    {{$nl := ""}}
+    {{range .}}
+        {{if $nl}}
+          <br>
+        {{end}}
+        <b>{{.Name}}</b><br>
+        <i>{{.Address}}</i><br>
+        <i>{{.City}}</i><br>
+        <i>{{.Zip}}</i><br>
+        {{$nl = "Yes"}}
+    {{end}}
+{{end}}
+
+{{define "Region"}}
+    {{if .Region}}
+      <h1> <u>{{.Region}}</u> </h1>
+     {{template "Hotels" .Hotels}}
+   {{end}}
+{{end}}
+
+
+{{define "Regions"}}
+    {{range .}}
+        {{template "Region" .}}
+    {{end}}
+{{end}}
+
+{{define "HotelListings"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Hotels </title>
+</head>
+<body>
+    {{template "Regions" .}}
+</body>
+</html>
+{{end}}

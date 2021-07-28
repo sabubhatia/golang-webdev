@@ -8,7 +8,6 @@ import (
 	"github.com/sabubhatia/golang-webdev/01_templates/utility/fileutil"
 )
 
-
 var tpl *template.Template
 var path = "./tmp/"
 
@@ -19,18 +18,17 @@ func init() {
 
 	tpl = template.Must(template.ParseGlob(os.Args[1]))
 }
+
 const (
 	Male int = iota
-	Female 
+	Female
 )
 
 type person struct {
 	name string
-	age uint8
-	sex int
-
+	age  uint8
+	sex  int
 }
-
 
 func (p person) Name() string {
 	return p.name
@@ -39,7 +37,6 @@ func (p person) Name() string {
 func (p person) Age() uint8 {
 	return p.age
 }
-
 
 func (p person) Sex() int {
 	return p.sex

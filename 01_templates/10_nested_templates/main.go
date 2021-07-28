@@ -41,11 +41,11 @@ func main() {
 	s := struct {
 		Footer string
 		Header string
-		Body []string
-	} {
+		Body   []string
+	}{
 		Footer: "This is a footer",
 		Header: "This is a header",
-		Body: []string {
+		Body: []string{
 			"Laos",
 			"Thailand",
 			"India",

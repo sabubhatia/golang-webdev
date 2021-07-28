@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-
 func OutF(path, tn string) *os.File {
 	if len(path) < 1 {
 		return os.Stdout

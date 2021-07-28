@@ -1,0 +1,33 @@
+{{define "AcaYear"}}
+<h1> <u>{{.}}</u></h1>
+{{end}}
+
+{{define "Semester"}}
+<h2> <i>{{.Term}}</i></h2>
+<ul>
+    {{range .Courses}}
+        <li> {{.Number}} {{.Name}} {{.Units}} </li>
+    {{end}}
+</ul>
+{{end}}
+
+
+{{define "Catalog"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+
+{{range .}}
+    {{template "AcaYear" .AcaYear}}
+    {{template "Semester" .Fall}}
+    {{template "Semester" .Spring}}
+    {{template "Semester" .Summer}}
+{{end}}
+
+</body>
+</html>
+{{end}}

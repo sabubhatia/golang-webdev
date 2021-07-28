@@ -9,7 +9,6 @@ import (
 	"github.com/sabubhatia/golang-webdev/01_templates/utility/fileutil"
 )
 
-
 var tpl *template.Template
 var path = "./tmp/"
 

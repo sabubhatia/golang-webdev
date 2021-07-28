@@ -1,0 +1,43 @@
+{{define "Header"}}
+<tr>
+    {{range $k, $v := .}}
+        <th> {{$k}} </th>
+    {{end}}
+</tr>
+{{end}}
+
+{{define "Body"}}
+    {{range $d := .}}
+        <tr>
+            <td> {{.Date}} </td>
+            <td> {{.Open}} </td>
+            <td> {{.High}} </td>
+            <td> {{.Low}} </td>
+            <td> {{.Close}} </td>
+            <td> {{.Volume}} </td>
+            <td> {{.AdjClose}} </td>
+        </tr>
+    {{end}}
+{{end}}
+
+{{define "Table"}} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Daily Rates </title>
+    <style>
+        table, th, td {
+            border: 1 px solid blue;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        {{template "Header" .Headers}}
+        {{template "Body" .Data}}
+    </table>
+</body>
+</html>
+
+{{end}}
