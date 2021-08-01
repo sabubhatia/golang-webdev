@@ -7,16 +7,16 @@ import (
 )
 
 type input struct {
-	Title string
+	Title   string
 	Heading string
-	Input string
-} 
+	Input   string
+}
 
 func main() {
-	s := input {
-		Title: "Escaping",
+	s := input{
+		Title:   "Escaping",
 		Heading: "HTML template escape",
-		Input: `<script>alert("You have been pwned !");</script>`,
+		Input:   `<script>alert("You have been pwned !");</script>`,
 	}
 
 	tpl := template.Must(template.ParseGlob(os.Args[1]))
@@ -24,4 +24,4 @@ func main() {
 	if err != nil {
 		log.Panic("Unable to execute template: ", err.Error())
 	}
-} 
+}

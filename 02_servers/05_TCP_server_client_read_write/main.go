@@ -20,7 +20,7 @@ func main() {
 }
 
 func handle(conn net.Conn) {
-	
+
 	log.Println("Handling..")
 	scn := bufio.NewScanner(conn)
 	log.Println("Got scanner...")

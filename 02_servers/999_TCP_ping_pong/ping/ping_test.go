@@ -22,7 +22,6 @@ func ping() {
 	handle(conn)
 }
 
-
 func handle(conn net.Conn) {
 	defer conn.Close()
 	scn := bufio.NewScanner(conn)

@@ -9,11 +9,9 @@ import (
 	"time"
 )
 
-
 func TestPong(t *testing.T) {
 	pong(t)
 }
-
 
 func pong(t *testing.T) {
 	li, err := net.Listen("tcp", ":8080")
@@ -32,7 +30,6 @@ func pong(t *testing.T) {
 		go handle(conn)
 	}
 }
-
 
 func handle(conn net.Conn) {
 

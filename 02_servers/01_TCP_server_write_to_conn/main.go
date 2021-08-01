@@ -7,7 +7,6 @@ import (
 	"net"
 )
 
-
 func main() {
 	li, err := net.Listen("tcp", ":8080")
 	if err != nil {
@@ -21,9 +20,9 @@ func main() {
 		if err != nil {
 			log.Panic(err)
 		}
-		
+
 		log.Println("Connection opened.", con.LocalAddr(), con.RemoteAddr())
-		io.WriteString(con, "\n Hi there this is your friendly tcp server !\n");
+		io.WriteString(con, "\n Hi there this is your friendly tcp server !\n")
 		fmt.Fprintln(con, "How is your day?")
 		fmt.Fprintf(con, "%v\n", "Good day I hope !")
 		con.Close()

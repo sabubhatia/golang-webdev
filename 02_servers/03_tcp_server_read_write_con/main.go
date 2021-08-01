@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-
 func main() {
 	li, err := net.Listen("tcp", ":8080")
 	if err != nil {
@@ -22,10 +21,10 @@ func main() {
 		if err != nil {
 			log.Panic(err)
 		}
-		
+
 		log.Println("Connection acquired: ", conn.RemoteAddr())
 		go handle(conn)
-		
+
 	}
 }
 

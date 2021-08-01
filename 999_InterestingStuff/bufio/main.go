@@ -6,12 +6,11 @@ import (
 	"strings"
 )
 
-
 func main() {
 	stringBufio()
 }
 
-func stringBufio() {	
+func stringBufio() {
 	// Create a scanner off a sring.
 
 	s := `The quick brown fox

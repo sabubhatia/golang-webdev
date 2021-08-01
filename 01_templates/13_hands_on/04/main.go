@@ -13,22 +13,21 @@ import (
 	"github.com/sabubhatia/golang-webdev/01_templates/utility/fileutil"
 )
 
-var hm map[string]int  = map[string]int{}
+var hm map[string]int = map[string]int{}
 var df string
 
 type data struct {
-	Date string
-	Open float64
-	High float64
-	Low float64
-	Close float64
-	Volume float64
+	Date     string
+	Open     float64
+	High     float64
+	Low      float64
+	Close    float64
+	Volume   float64
 	AdjClose float64
 }
 
 var dt []data
 var tpl *template.Template
-
 
 func init() {
 	if len(os.Args) < 3 {
@@ -58,10 +57,10 @@ func main() {
 	log.Println("Num headers: ", len(hm))
 	s := struct {
 		Headers map[string]int
-		Data []data
-	} {
+		Data    []data
+	}{
 		Headers: hm,
-		Data: dt,
+		Data:    dt,
 	}
 
 	f = fileutil.OutF("./tmp/", "Table")
@@ -148,7 +147,7 @@ func header(sx []string) error {
 	cnt := 0
 	for _, s := range sx {
 		if len(s) < 0 {
-			return fmt.Errorf("Header cannot be empty string")			
+			return fmt.Errorf("Header cannot be empty string")
 		}
 		hm[s] = cnt
 		cnt++
@@ -156,12 +155,12 @@ func header(sx []string) error {
 	return nil
 }
 
-func record(sx []string ) (*data, error) {
-	
-	var d data 
+func record(sx []string) (*data, error) {
+
+	var d data
 
 	d.Date = sx[0]
-	outx := []*float64 {
+	outx := []*float64{
 		&d.Open,
 		&d.High,
 		&d.Low,
@@ -169,11 +168,11 @@ func record(sx []string ) (*data, error) {
 		&d.Volume,
 		&d.AdjClose,
 	}
-	for i := 0; i < 6; i ++ {
+	for i := 0; i < 6; i++ {
 		var err error
-		(*outx[i]), err  = strconv.ParseFloat(sx[i + 1], 64)
+		(*outx[i]), err = strconv.ParseFloat(sx[i+1], 64)
 		if err != nil {
-			return nil, fmt.Errorf("Conversion to float64 failed. Value[%s] is not valid for lcoation[%d]", sx[i + 1], i)
+			return nil, fmt.Errorf("Conversion to float64 failed. Value[%s] is not valid for lcoation[%d]", sx[i+1], i)
 		}
 	}
 	return &d, nil
