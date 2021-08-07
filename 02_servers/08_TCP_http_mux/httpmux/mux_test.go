@@ -38,7 +38,7 @@ func handle(conn net.Conn) error {
 	log.Printf("****Request line is: %v", hdr)
 
 	// Satisfy the request by routing to appropriate route which may send the body
-	err = execute(conn, hdr.Uri())
+	err = execute(conn, hdr.Method(), hdr.Uri())
 	if err != nil {
 		log.Println("Unable to execute route: ", err)
 	}
@@ -68,6 +68,8 @@ func getHeader(conn net.Conn) (Header, error) {
 				switch flds[0] {
 				case get:
 					method = get
+				case post:
+					method = post
 				default:
 					return nil, fmt.Errorf("Inavlid request line. %s. %s unknown method", txt, flds[0])
 				}

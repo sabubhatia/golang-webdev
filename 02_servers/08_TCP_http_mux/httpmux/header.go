@@ -4,7 +4,7 @@ import "fmt"
 
 const (
 	get = "GET"
-	put = "PUT"
+	post = "POST"
 )
 
 type headerStruct struct {

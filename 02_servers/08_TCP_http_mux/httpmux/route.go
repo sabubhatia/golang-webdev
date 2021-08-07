@@ -2,10 +2,11 @@ package httpmux
 
 import (
 	"fmt"
-	"net"
+	"io"
 )
 
 type handleRoute interface {
 	fmt.Stringer
-	Handle(con net.Conn) error
+	Body(io.Writer) error
+	Name() string
 }

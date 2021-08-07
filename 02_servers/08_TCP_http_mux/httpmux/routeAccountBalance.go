@@ -1,10 +1,9 @@
 package httpmux
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"log"
-	"net"
 	"text/template"
 )
 
@@ -15,19 +14,14 @@ func NewBalance() handleRoute {
 	return &balanceHandler{}
 }
 
-func (*balanceHandler) Handle(conn net.Conn) error {
-	body := `<!DOCTYPE html>
-	<html lang="en">
-	<head>
-	<meta charset="UTF-8">
-	<title>Balance </title>
-	</head>
-	<body>
-	<b> Your balance dear is: {{.}} </b>
-	</body>
-	</html>`
 
-	w := bufio.NewWriter(conn)
+func (*balanceHandler) String() string {
+	return fmt.Sprintf("(Account Balance Handler)")
+}
+
+func (*balanceHandler) Body(w io.Writer) error {
+	body := `<b> Your balance dear is: {{.}} </b>`
+
 	tpl := template.Must(template.New("Response").Parse(body))
 
 	// This is the response body..
@@ -36,17 +30,9 @@ func (*balanceHandler) Handle(conn net.Conn) error {
 		log.Println(err)
 		return err
 	}
-
-	fmt.Fprint(conn, "HTTP/1.1 200 OK\r\n")
-	fmt.Fprintf(conn, "Content-Length: %d\r\n", w.Size()-w.Available())
-	fmt.Fprint(conn, "Content-Type: text/html\r\n")
-	fmt.Fprint(conn, "\r\n")
-	w.Flush()
-
-	log.Println("Done..")
-	return nil
+	return nil	
 }
 
-func (*balanceHandler) String() string {
-	return fmt.Sprintf("(Account Balance Handler)")
+func (*balanceHandler) Name() string {
+	return fmt.Sprintf("Balance")
 }
