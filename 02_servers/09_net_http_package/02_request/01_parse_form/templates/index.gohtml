@@ -1,0 +1,32 @@
+{{define "Input"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> User Input </title>
+</head>
+
+<body>
+{{if .}}
+    <p> <strong> Variable names </strong> (identifiers) and <em>values:</em></p>
+    {{range $k, $v := .}}
+        <p><strong>{{$k}}</strong></p>
+        {{range $v}}
+        <ul>
+            <li><em>{{.}}</em></li>
+        </ul>
+        {{end}}
+    {{end}}
+{{end}}
+
+
+
+<form action="/?fname=Pheng" method="POST">
+    <input type="text" name="fname" placeholder = "first name" autofocus autocomplete="on">
+    <input type="submit" name="submit-btn" value="onda button">
+</form>
+
+</body>
+
+</html>
+{{end}}

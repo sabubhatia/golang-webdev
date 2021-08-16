@@ -1,0 +1,37 @@
+{{define "Method"}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title> Method </title>
+    </head>
+
+    <body>
+        {{if .Method}}
+            <p><strong> Requested method is </strong> <em>{{.Method}}</em></p>
+        {{end}}
+
+        {{if .Submissions}}
+            <p><strong>Variable names</strong> (identifier) and <em>values</em></p>
+            {{range $k, $v := .Submissions}}
+                <p><strong>{{$k}}</strong></p>
+                <ul>
+                    {{range $v}}
+                        <li><em> {{.}} </em></li>
+                    {{end}}
+                </ul>
+            {{end}}
+        {{end}}
+
+        <form action="/" method="POST">
+            <input type="text" name="fname" placeholder="First name" autofocus autocomplete=off>
+            <input type="submit" name="submit-btn" value="onda button">
+        </form>
+
+    </body>
+</html>
+
+
+{{end}}

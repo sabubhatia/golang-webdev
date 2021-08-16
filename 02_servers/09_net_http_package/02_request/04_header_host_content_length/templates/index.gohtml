@@ -1,0 +1,74 @@
+{{define "URL"}}
+
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title> Method </title>
+    </head>
+
+    <body>
+        {{if .Method}}
+            <p><strong> Requested method is </strong> <em>{{.Method}}</em></p>
+        {{end}}
+
+        {{if .URL}}
+            <p><strong>Request URL:</strong></p>
+            <ul>
+                <li><strong> Scheme: </strong> <em> {{.URL.Scheme}} </em></li>
+                <li><strong> Opaque: </strong> <em> {{.URL.Opaque}} </em></li>
+                <li><strong> Host: </strong> <em> {{.URL.Host}} </em></li>
+                <li><strong> Path: </strong> <em> {{.URL.Path}} </em></li>
+                <li><strong> RawPath: </strong> <em> {{.URL.RawPath}} </em></li>
+                <li><strong> ForceQuery: </strong> <em> {{.URL.ForceQuery}} </em></li>
+                <li><strong> RawQuery: </strong> <em> {{.URL.RawQuery}} </em></li>
+                <li><strong> Fragment: </strong> <em> {{.URL.Fragment}} </em></li>
+                <li><strong> RawFragment: </strong> <em> {{.URL.RawFragment}} </em></li>
+            </ul>
+
+        {{end}}
+
+        {{if .Header}}
+            <p><strong>Request Headers:</strong></p>
+            {{range $k, $v := .Header}}
+                <strong>{{$k}}</strong> <br>
+                <ul>
+                   {{range $v}}
+                        <li><em>{{.}}</em></li>
+                  {{end}}
+                </ul>
+            {{end}}
+        {{end}}
+
+
+        {{if .Host}}
+            <p><strong>Request Host:</strong> <em>{{.Host}}</em></p>
+        {{end}}
+
+        {{if .ContentLength}}
+            <p><strong>Request Content Length:</strong> <em>{{.ContentLength}}</em></p>
+        {{end}}
+
+        {{if .Submissions}}
+            <p><strong>Variable names</strong> (identifier) and <em>values</em></p>
+            {{range $k, $v := .Submissions}}
+                <p><strong>{{$k}}</strong></p>
+                <ul>
+                    {{range $v}}
+                        <li><em> {{.}} </em></li>
+                    {{end}}
+                </ul>
+            {{end}}
+        {{end}}
+
+        <form action="/" method="POST">
+            <input type="text" name="fname" placeholder="First name" autofocus autocomplete=off>
+            <input type="submit" name="submit-btn" value="onda button">
+        </form>
+
+    </body>
+</html>
+
+
+{{end}}
