@@ -1,0 +1,46 @@
+{{define "Index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Mux </title>
+</head>
+<body>
+    <strong>{{.Element}}</strong> <br>
+    <a href="/"> Index </a><br>
+    <a href="/BlogReader">Blog</a></br>
+    {{if .Form}}
+        {{if eq .Form "BlogReader"}}
+            {{template "BlogReader"}}
+        {{end}}
+    {{end}}
+    <a href="/BlogWriter">Blog Writer</a></br>
+   	{{if .Form}}
+        {{if eq .Form "BlogWriter"}}
+            {{template "BlogWriter"}}
+        {{end}}
+    {{end}}
+</body>
+</html>
+{{end}}
+
+{{define "BlogReader"}}
+<form action="/ReadBlog" method="get">
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category"><br><br>
+    <label for="article">Article:</label>
+    <input type="text" id="article" name="article"><br>
+    <input type="submit" id="submit-btn" name="submit-btn"><br>
+</form>
+{{end}}
+
+{{define "BlogWriter"}}
+<form action="/WriteBlog" method="post">
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category"><br><br>
+    <label for="article">Article:</label>
+    <input type="text" id="article" name="article"><br>
+    <label for="File">File:</label>
+    <input type="text" id="file" name="file"><br>
+    <input type="submit" id="submit-btn" name="submit-btn"><br></form>
+{{end}}

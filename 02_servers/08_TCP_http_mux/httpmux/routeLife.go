@@ -19,8 +19,8 @@ func (*lifeHandler) String() string {
 }
 
 func (*lifeHandler) Body(w io.Writer) error {
-	body := `<b> Life is: {{.}} </b>` 
-	
+	body := `<b> Life is: {{.}} </b>`
+
 	tpl := template.Must(template.New("Response").Parse(body))
 
 	// This is the response body..
@@ -32,7 +32,6 @@ func (*lifeHandler) Body(w io.Writer) error {
 
 	return nil
 }
-
 
 func (*lifeHandler) Name() string {
 	return fmt.Sprintf("Life")

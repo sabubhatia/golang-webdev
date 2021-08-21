@@ -3,7 +3,7 @@ package httpmux
 import "fmt"
 
 const (
-	get = "GET"
+	get  = "GET"
 	post = "POST"
 )
 

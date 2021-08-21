@@ -5,11 +5,8 @@ import (
 	"io"
 )
 
-
 type applyProcessStruct struct {
-
 }
-
 
 func NewApplyProcess() handleRoute {
 	return &applyProcessStruct{}
@@ -20,7 +17,7 @@ func (*applyProcessStruct) String() string {
 }
 
 func (*applyProcessStruct) Name() string {
-		return fmt.Sprintf("ApplyProcess")
+	return fmt.Sprintf("ApplyProcess")
 }
 
 func (*applyProcessStruct) Body(w io.Writer) error {

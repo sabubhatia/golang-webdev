@@ -22,8 +22,8 @@ func (*applyHandler) Body(w io.Writer) error {
 	body := `
 	<form method="post" action="/apply">
 	<input type="submit" value="apply">
-	` 
-	
+	`
+
 	tpl := template.Must(template.New("Response").Parse(body))
 
 	// This is the response body..
@@ -35,7 +35,6 @@ func (*applyHandler) Body(w io.Writer) error {
 
 	return nil
 }
-
 
 func (*applyHandler) Name() string {
 	return fmt.Sprintf("Apply")

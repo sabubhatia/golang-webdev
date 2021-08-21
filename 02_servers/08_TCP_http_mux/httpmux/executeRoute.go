@@ -11,7 +11,7 @@ import (
 
 type route struct {
 	method string
-	uri string
+	uri    string
 }
 
 type registry map[route]handleRoute
@@ -23,7 +23,7 @@ func execute(conn net.Conn, method string, uri string) error {
 		return fmt.Errorf("Uri cannot be empty..")
 	}
 	loadRegistry()
-	h := reg[route{method,uri}]
+	h := reg[route{method, uri}]
 	if h == nil {
 		return fmt.Errorf("Method: [%s], Route: [%s] not recognised ", method, uri)
 	}
@@ -36,8 +36,8 @@ func loadRegistry() {
 	}
 	reg = make(registry)
 	reg[route{get, "/"}] = NewRoot()
-	reg[route{get, "/BALANCE",}] = NewBalance()
-	reg[route{get, "/LIFE",}] = NewLife()
+	reg[route{get, "/BALANCE"}] = NewBalance()
+	reg[route{get, "/LIFE"}] = NewLife()
 	reg[route{get, "/APPLY"}] = NewApply()
 	reg[route{post, "/APPLY"}] = NewApplyProcess()
 
@@ -74,10 +74,10 @@ func page(conn net.Conn, h handleRoute) error {
 
 	w := bufio.NewWriter(conn)
 	// This is the response body..
-	v := struct { 
+	v := struct {
 		Head string
 		Body string
-	} {
+	}{
 		h.Name(),
 		s.String(),
 	}

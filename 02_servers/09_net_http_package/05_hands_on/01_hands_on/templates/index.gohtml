@@ -1,0 +1,35 @@
+{{define "Index"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Hands On -1/1 </title>
+</head>
+<body>
+    <strong> {{.Element}} </strong> <br>
+    <a href="/"> Index </a> <br>
+    <a href="/Dog"> Dog </a> <br>
+    <a href="/Me"> Me </a> <br>
+    {{if eq .Form "Me"}}
+        <form action="/Me/InputName" method="Post">
+        <input type="text" id="name" name="name"> <br>
+        <input type="submit" id="submit-btn" name="submit-btn"><br>
+        </form>
+    {{end}}
+</body>
+</html>
+{{end}}
+
+{{define "Name"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Hello Name </title>
+</head>
+<body>
+    <strong> Hello, {{.}} </strong> <br><br>
+    <a href="/Index"> Back </a> <br>
+</body>
+</html>
+{{end}}

@@ -26,9 +26,9 @@ func (prata) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	data := struct {
-		Method string
+		Method      string
 		Submissions url.Values
-	} {
+	}{
 		req.Method,
 		req.PostForm,
 	}

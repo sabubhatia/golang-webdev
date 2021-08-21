@@ -17,7 +17,6 @@ func init() {
 	tpl = template.Must(template.ParseGlob(os.Args[1]))
 }
 
-
 type hotdog int
 
 func (hotdog) ServeHTTP(w http.ResponseWriter, r *http.Request) {

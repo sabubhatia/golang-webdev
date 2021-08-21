@@ -11,7 +11,6 @@ func (hotdog) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	io.WriteString(w, "<h1> Doggie Doggie !!</h1>")
 }
 
-
 type hotcat int
 
 func (hotcat) ServeHTTP(w http.ResponseWriter, req *http.Request) {

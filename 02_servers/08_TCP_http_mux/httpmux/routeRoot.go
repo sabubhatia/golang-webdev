@@ -13,15 +13,12 @@ func NewRoot() handleRoute {
 	return &rootHandler{}
 }
 
-
 func (*rootHandler) String() string {
 	return fmt.Sprintf("(Root Handler)")
 }
 
-
 func (*rootHandler) Body(w io.Writer) error {
 	body := `<b> Hello, World ! </b>`
-	
 
 	tpl := template.Must(template.New("Response").Parse(body))
 

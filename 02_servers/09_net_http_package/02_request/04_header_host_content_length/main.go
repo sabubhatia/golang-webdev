@@ -26,13 +26,13 @@ func (prata) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 
 	data := struct {
-		Method string
-		Submissions url.Values
-		URL *url.URL
-		Header http.Header
-		Host string
+		Method        string
+		Submissions   url.Values
+		URL           *url.URL
+		Header        http.Header
+		Host          string
 		ContentLength int64
-	} {
+	}{
 		req.Method,
 		req.PostForm,
 		req.URL,

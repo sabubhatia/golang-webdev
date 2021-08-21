@@ -14,7 +14,6 @@ func NewBalance() handleRoute {
 	return &balanceHandler{}
 }
 
-
 func (*balanceHandler) String() string {
 	return fmt.Sprintf("(Account Balance Handler)")
 }
@@ -30,7 +29,7 @@ func (*balanceHandler) Body(w io.Writer) error {
 		log.Println(err)
 		return err
 	}
-	return nil	
+	return nil
 }
 
 func (*balanceHandler) Name() string {

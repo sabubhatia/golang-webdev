@@ -12,16 +12,15 @@ func cleanUp() error {
 func doSomething() error {
 	return fmt.Errorf("**ERROR: doSomething() error")
 }
-func getMessageBug()(string, error) {
+func getMessageBug() (string, error) {
 	defer cleanUp()
 
 	return "This is buggy. Where is the cleanUp() error?", nil
 }
 
-
-func getMessageBug2()(string,  error) {
-	 var err error
-	 s := "Ok"
+func getMessageBug2() (string, error) {
+	var err error
+	s := "Ok"
 
 	fmt.Println(&err, err)
 	defer func() {
@@ -34,13 +33,13 @@ func getMessageBug2()(string,  error) {
 }
 
 func main() {
-/*	msg, err := getMessageBug()
-	if err != nil {
-		log.Println(err)
-	}
-	log.Println(msg)
-*/
-	msg, err:= getMessageBug2()
+	/*	msg, err := getMessageBug()
+		if err != nil {
+			log.Println(err)
+		}
+		log.Println(msg)
+	*/
+	msg, err := getMessageBug2()
 	if err != nil {
 		log.Println(err)
 	}
