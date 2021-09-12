@@ -1,0 +1,19 @@
+{{define "Index"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    </head>
+    <body>
+        <strong> {{.Element}} </strong> <br>
+        <a href="/"> Index </a> <br>
+        <a href="/about"> About </a> <br>
+        <a href="/contact"> Contact </a> <br>
+        <a href="/apply"> Apply </a> <br>
+        {{if eq .Form "Apply"}}
+            <form action="/apply" method="Post">
+                <input type="submit" id="submit-btn" name="submit-btn" value="Hit Me !">
+            </form>
+        {{end}}
+    </body>
+</html>
+{{end}}
