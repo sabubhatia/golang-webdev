@@ -1,0 +1,18 @@
+{{define "Forms"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta chartset="UTF-8">
+        <title> Forms </title>
+    </head>
+    <body>
+        <p> Passing values via utl and message body. </p>
+        <form action="/" method={{.Method}}>
+            <input type="text" name="stuff" id="stuff"> <br>
+            <input type="text" name="method" id="method"> <br>
+            <input type="submit" name="submit-btn" id="submit-btn"> <br>
+        </form>
+        <p> Method: {{.Method}}, Stuff: {{.Stuff}} 
+    </body>
+</html>
+{{end}}

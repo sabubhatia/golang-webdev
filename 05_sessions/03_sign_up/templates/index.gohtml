@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Sign Up - Index </title>
+    </head>
+    <body>
+        {{if .First}}
+            First: {{.First}} <br>
+            Last: {{.Last}} <br>
+            Username: {{.Username}} <br>
+        {{else}}
+            <h2> <a href="/signup"> Please sign up </a> </h2>
+        {{end}}
+
+        <br>
+        <h2> <a href="/bar"> Go to the bar </a> </h2>
+        <h2> <a href="/dump"> Dump Data </a> </h2>
+    </body>
+</html>

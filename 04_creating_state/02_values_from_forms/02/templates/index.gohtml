@@ -1,0 +1,43 @@
+{{define "Index"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Subscription </title>
+    </head>
+    <body>
+        {{template "Form" .}}
+        <br>
+        {{template "Dump Data" .}}
+        <br>
+        {{template "Copyright"}}
+    </body>
+</html>
+{{end}}
+
+
+{{define "Form"}} 
+    <form action="/" method={{.Method}}>
+        <label for="First"> First name </label>
+        <input type="text" name="First" id="First" value={{.First}}> <br>
+        <label for="Last"> Last name </label>
+        <input type="text" name="Last" id="Last" value={{.Last}}> <br>
+        <input type="checkbox" name="Subscribed" id="Subscribed">
+        <label for="Subscribed"> Is subscribed? </label> <br>
+        <label for="Method"> Method </label> 
+        <input type="text" name="Method" id="Method" value={{.Method}}> <br>
+        <input type="submit" name="submit-btn" id="submit-btn"> <br>
+    </form>
+{{end}}
+
+
+{{define "Copyright"}}
+    <i> Copyright, Sabu Bhatia 2021 </i>
+{{end}}
+
+{{define "Dump Data"}}
+    <strong> First name: </strong> {{.First}} <br>
+    <strong> Last name: </strong> {{.Last}} <br>
+    <strong> Subscribed? </strong> {{.Subscribed}} <br>
+    <i> <strong> Method </strong> {{.Method}}</i> <br>
+{{end}}

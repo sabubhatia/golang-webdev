@@ -1,0 +1,27 @@
+{{define "Form"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Enctype </title>
+    </head>
+    <body>
+        <p> Form will be submitted using {{.Enctype}} </p>
+        <form action="/" method="Post" enctype="{{.Enctype}}">
+            <label for name="first"> First name </label>
+            <input type="text" id="first" name="first"> <br>
+            <label for name="last"> Last name </label>
+            <input type="text" id="last" name="last"> <br>
+            <label for name="enctype"> Enctype </label>
+            <input type="text" id="enct", name="enct"> <br>
+            <label for name="subscribed"> Is subscribed? </label>
+            <input type="checkbox" id="subscribed" name="subscribed"> <br>
+            {{if eq .Enctype "multipart/form-data"}}
+                <input type="file" id="file" name="file"> <br>
+            {{end}}
+            <input type="submit", id="submit-btn" name="submit-btn"> <br>
+        </form>
+
+    </body>
+</html>
+{{end}}

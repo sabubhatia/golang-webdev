@@ -1,0 +1,69 @@
+{{define "Index"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Session </title>
+    <//head>
+    <body>
+        <form action="/" method="post">
+            <input type="text" id="username" name="username" placeholder="email"> <br>
+            <input type="text" id="first" name="first" placeholder="First name"> <br>
+            <input type="text" id="last" name="last" placeholder="Last name"> <br>
+            <input type ="submit" id="submit-btn" name="submit-btn" value="Hit me !">
+        </form>
+        {{if .First}}
+            Username: {{.Username}} <br>
+            First: {{.First}} <br>
+            Last: {{.Last}} <br>
+        {{end}}
+
+        <br>
+        <h1><a href="/bar"> Take me to the bar </a> </h1>
+    </body>
+</html>
+
+{{end}}
+
+
+{{define "Bar"}}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title> Bar </title>
+        </head>
+        <body>
+            <p> Welcome to the bar. What can I serve you.. </p>
+
+            {{if .First}}
+                FIRST: {{.First}} <br>
+                LAST: {{.Last}} <br>
+                USERNAME: {{.Username}} <br>
+            {{end}}
+            
+        </body>
+    </html>
+{{end}}
+
+{{define "Dump"}}
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title> Dump ALL </title>
+        </head>
+        <body>
+            <h1> Session Database Dump </h1>
+            {{range $k, $v := .DBSessions}}
+                {{$k}} - {{$v}} <br>
+            {{end}}
+            <br>
+
+            <h1> User Database Dump </h1>
+            {{range $k, $v := .DBUsers}}
+                {{$k}} - [{{$v.Username}} {{$v.First}} {{$v.Last}}] <br>
+            {{end}}
+        </body>
+    </html>
+{{end}}

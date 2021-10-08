@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Bar </title>
+    </head>
+    <body>
+        <h1> What can I serve you? </h1>
+        {{if .First}}
+            First: {{.First}} <br>
+            Last: {{.Last}} <br>
+            Username: {{.Username}} <br>
+        {{end}}
+        <h2> <a href="/"> Home </a> </h2>
+    </body>
+</html>

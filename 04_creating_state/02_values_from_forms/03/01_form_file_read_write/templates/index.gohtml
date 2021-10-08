@@ -1,0 +1,18 @@
+{{define "ReadFile"}}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Upload File </title>
+    </head>
+    <body>
+        <form action="/" method="Post" enctype="multipart/form-data">
+            <label for="name"> First name: </label> 
+            <input type="text" name="first" id="first"> <br>
+            <input type="file" name="file" id="file"> <br>
+            <input type="submit" name="submit-btn" id="submit-btn"> <br>
+        </form>
+        <p> {{if .First}} Dear {{.First}} <br> {{end}} {{.F}} </p>
+    </body>
+</html>
+{{end}}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title> Dump </title>
+    </head>
+    <body>
+        <h1> The sessions database contains: </h1>
+        {{range $k, $v := .DBSessions}}
+            {{$k}}: {{$v}} <br>
+        {{end}}
+        <br>
+        <h1> The user database contains: </h1>
+        {{range $k, $v := .DBUsers}}
+            {{$k}}: {{$v}} <br>
+        {{end}}
+        <br>
+        <h3><a href="/"> Home </a></h3>
+    </body>
+</html>
