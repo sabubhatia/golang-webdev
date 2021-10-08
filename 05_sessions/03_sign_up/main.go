@@ -5,13 +5,14 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+	 "golang.org/x/crypto/bcrypt"
 )
 
 type user struct {
 	Username string
 	First    string
 	Last     string
-	Pwd      string
+	Pwd      []byte
 }
 
 var (
@@ -67,6 +68,11 @@ func signup(w http.ResponseWriter, req *http.Request) {
 		f := req.FormValue("first")
 		l := req.FormValue("last")
 		p := req.FormValue("password")
+		hp, err  := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
+		if err != nil {
+			http.Error(w, err.Error(),http.StatusInternalServerError)
+			return
+		}
 
 		cookie, err := newsSessionCookie()
 		if err != nil {
@@ -74,7 +80,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 		}
 		http.SetCookie(w, cookie)
 		dbSessions[cookie.Value] = un
-		u = user{un, f, l, p}
+		u = user{un, f, l, hp}
 		dbUsers[un] = u
 
 		//redirect
