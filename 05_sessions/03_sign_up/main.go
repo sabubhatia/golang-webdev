@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 	"text/template"
-	 "golang.org/x/crypto/bcrypt"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type user struct {
@@ -22,6 +22,17 @@ var (
 )
 
 func init() {
+	// load users data
+	pwd, err := bcrypt.GenerateFromPassword([]byte("abcdef"), bcrypt.DefaultCost)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	dbUsers["sabusingh.bhatia@gmail.com"] = user{
+		Username: "sabusingh.bhatia@gmail.com",
+		First: "Sabu",
+		Last: "Bhatia",
+		Pwd: pwd,
+	}
 	if len(os.Args) < 2 {
 		log.Fatal("Expected at least 2 args. Got: ", len(os.Args))
 	}
@@ -88,10 +99,90 @@ func signup(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err := tpl.ExecuteTemplate(w, "signup.gohtml", u)
+	err := tpl.ExecuteTemplate(w, "signup.gohtml", nil)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func login(w http.ResponseWriter, req *http.Request) {
+	if alreadyLogedIn(req) {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
+	}
+
+	if req.Method == http.MethodPost {
+		// process login
+
+		// does the user have an account?
+		un := req.FormValue("username")
+	    u, ok := dbUsers[un]
+		if !ok {
+			http.Error(w, "Unrecognised username or password", http.StatusForbidden)
+			return
+		}
+
+		// compare the encrypted password to the passed in password
+		pwd := req.FormValue("password") 
+		err := bcrypt.CompareHashAndPassword(u.Pwd, []byte(pwd))
+		if err != nil {
+			http.Error(w, "Unrecognised username or password", http.StatusForbidden)	
+			return 
+		}
+
+		// create a session id sid.
+		cookie, err := newsSessionCookie()
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return 
+		}
+
+		// Set the cookie to the session id
+		http.SetCookie(w, cookie)
+
+		// update session table. map sid to user name.
+		dbSessions[cookie.Value] = un
+
+		// Logged on. Go to the index.
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return
+	}
+
+	err := tpl.ExecuteTemplate(w, "login.gohtml", nil)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func logout(w http.ResponseWriter, req *http.Request) {
+	if !alreadyLogedIn(req) {
+		log.Println("Not logged in...")
+		// Not logged in so redirect somewhere else.
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+		return 
+	}
+
+	log.Println("Logout...")
+	cookie, err := req.Cookie("sid")
+	if err != nil {
+		// This shouldnt really be here given we are per above logged in so a cookie must exist.
+		// We are still handling the error. But if we are here something is really wrong.
+		// Pehaps it may be better to throw a fatal error here.
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// expire the cookie.
+	cookie.MaxAge = -1
+
+	// delete entry from session map
+	delete(dbSessions, cookie.Value)
+
+	// set the cookie.
+	http.SetCookie(w, cookie)
+
+	http.Redirect(w, req, "/login", http.StatusSeeOther)
 }
 
 func dump(w http.ResponseWriter, req *http.Request) {
@@ -112,6 +203,8 @@ func main() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/bar", bar)
 	http.HandleFunc("/dump", dump)
+	http.HandleFunc("/login", login)
+	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/signup", signup)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	log.Fatal(http.ListenAndServe(":8080", nil))

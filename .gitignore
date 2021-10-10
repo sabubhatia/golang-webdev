@@ -17,5 +17,8 @@
 #output directory contents
 tmp/**
 
+#binary directory
+bin/**
+
 #mac utility files
 .DS_Store
