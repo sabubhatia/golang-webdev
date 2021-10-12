@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 	"text/template"
+	"time"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -13,6 +15,12 @@ type user struct {
 	First    string
 	Last     string
 	Pwd      []byte
+	Role     string
+}
+
+type session struct {
+	un string
+	lastUsed time.Time
 }
 
 var (
@@ -21,6 +29,12 @@ var (
 	tpl        *template.Template
 )
 
+const (
+	RoleAdmin = "admin"
+	RoleRead = "read"
+	RoleRW = "rdwrt"
+	RoleWrite = "write"
+)
 func init() {
 	// load users data
 	pwd, err := bcrypt.GenerateFromPassword([]byte("abcdef"), bcrypt.DefaultCost)
@@ -32,6 +46,7 @@ func init() {
 		First: "Sabu",
 		Last: "Bhatia",
 		Pwd: pwd,
+		Role: "admin",
 	}
 	if len(os.Args) < 2 {
 		log.Fatal("Expected at least 2 args. Got: ", len(os.Args))
@@ -55,6 +70,10 @@ func bar(w http.ResponseWriter, req *http.Request) {
 	}
 
 	u := getUser(req)
+	if u.Role != RoleRW {
+		http.Error(w, "You dont have sufficient priviliges to enter the bar.", http.StatusForbidden)
+		return
+	}
 	err := tpl.ExecuteTemplate(w, "bar.gohtml", u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -84,14 +103,14 @@ func signup(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, err.Error(),http.StatusInternalServerError)
 			return
 		}
-
+		r := req.FormValue("role")
 		cookie, err := newsSessionCookie()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		http.SetCookie(w, cookie)
 		dbSessions[cookie.Value] = un
-		u = user{un, f, l, hp}
+		u = user{un, f, l, hp, r}
 		dbUsers[un] = u
 
 		//redirect
@@ -186,6 +205,11 @@ func logout(w http.ResponseWriter, req *http.Request) {
 }
 
 func dump(w http.ResponseWriter, req *http.Request) {
+	u := getUser(req)
+	if u.Role != RoleAdmin {
+		http.Error(w, "You must have admin priviliges to see the dump", http.StatusForbidden)
+		return 
+	}
 	d := struct {
 		DBSessions map[string]string
 		DBUsers    map[string]user
