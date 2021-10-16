@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 )
@@ -17,11 +18,12 @@ func newsSessionCookie() (*http.Cookie, error) {
 		Path:     "/",
 		Secure:   true,
 		HttpOnly: true,
+		MaxAge:   SessionLength,
 	}
 
 	return cookie, nil
 }
-func getUser(req *http.Request) user {
+func getUser(w http.ResponseWriter, req *http.Request) user {
 	// 1. Cookie must exist.
 	// 2. sid->un exists.
 	// 3. un->user exists.
@@ -31,29 +33,55 @@ func getUser(req *http.Request) user {
 		return u
 	}
 
-	if un, ok := dbSessions[cookie.Value]; ok {
-		u = dbUsers[un]
+	if s, ok := dbSessions[cookie.Value]; ok {
+		u = dbUsers[s.un]
+		s.lastActivity = time.Now()
+		dbSessions[cookie.Value] = s
+		cookie.MaxAge = SessionLength
+		// set the cookie here.
+		http.SetCookie(w, cookie)
 	}
 
 	return u
 }
 
-func alreadyLogedIn(req *http.Request) bool {
+func alreadyLogedIn(w http.ResponseWriter, req *http.Request) bool {
 	// If have a cookie && have  sid->un mapping and a un->user mapping then logged in
 	cookie, err := req.Cookie("sid")
 	if err != nil {
 		return false
 	}
-
+	f := func() {
+		cookie.MaxAge = SessionLength
+		http.SetCookie(w, cookie)
+	}
 	// does sid->un exist in session db.
-	if un, ok := dbSessions[cookie.Value]; ok {
+	if s, ok := dbSessions[cookie.Value]; ok {
 		// does un->user exist in the user dataabse.
-		if _, ok := dbUsers[un]; !ok {
+		if _, ok := dbUsers[s.un]; !ok {
+			// Will  only get here is the user has been deleted from the db.
 			return false
 		}
+		s.lastActivity = time.Now()
+		dbSessions[cookie.Value] = s
+		f() // Cookie and session last activity are at parity.
 	} else {
 		return false
 	}
 
 	return true
+}
+
+func cleanDBSessions() int {
+
+	cnt := 0
+	for k, v := range dbSessions {
+		if time.Since(v.lastActivity) >= (time.Second * time.Duration(SessionLength)) {
+			// Elapsed stay alive time so delete this.
+			delete(dbSessions, k)
+			cnt++
+		}
+	}
+
+	return cnt
 }

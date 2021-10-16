@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
@@ -19,22 +20,26 @@ type user struct {
 }
 
 type session struct {
-	un string
-	lastUsed time.Time
+	un           string
+	lastActivity time.Time
 }
 
 var (
-	dbUsers    = map[string]user{}   // un->user
-	dbSessions = map[string]string{} // sid->un
-	tpl        *template.Template
+	dbUsers     = map[string]user{}    // un->user
+	dbSessions  = map[string]session{} // sid->session
+	tpl         *template.Template
+	lastCleaned = time.Now()
+	chanClean   = make(chan struct{})
 )
 
 const (
-	RoleAdmin = "admin"
-	RoleRead = "read"
-	RoleRW = "rdwrt"
-	RoleWrite = "write"
+	RoleAdmin         = "admin"
+	RoleRead          = "read"
+	RoleRW            = "rdwrt"
+	RoleWrite         = "write"
+	SessionLength int = 30 // seconds.
 )
+
 func init() {
 	// load users data
 	pwd, err := bcrypt.GenerateFromPassword([]byte("abcdef"), bcrypt.DefaultCost)
@@ -43,10 +48,10 @@ func init() {
 	}
 	dbUsers["sabusingh.bhatia@gmail.com"] = user{
 		Username: "sabusingh.bhatia@gmail.com",
-		First: "Sabu",
-		Last: "Bhatia",
-		Pwd: pwd,
-		Role: "admin",
+		First:    "Sabu",
+		Last:     "Bhatia",
+		Pwd:      pwd,
+		Role:     "admin",
 	}
 	if len(os.Args) < 2 {
 		log.Fatal("Expected at least 2 args. Got: ", len(os.Args))
@@ -56,7 +61,7 @@ func init() {
 }
 
 func index(w http.ResponseWriter, req *http.Request) {
-	u := getUser(req)
+	u := getUser(w, req)
 	err := tpl.ExecuteTemplate(w, "index.gohtml", u)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -64,12 +69,12 @@ func index(w http.ResponseWriter, req *http.Request) {
 }
 
 func bar(w http.ResponseWriter, req *http.Request) {
-	if !alreadyLogedIn(req) {
+	if !alreadyLogedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
 
-	u := getUser(req)
+	u := getUser(w, req)
 	if u.Role != RoleRW {
 		http.Error(w, "You dont have sufficient priviliges to enter the bar.", http.StatusForbidden)
 		return
@@ -82,7 +87,7 @@ func bar(w http.ResponseWriter, req *http.Request) {
 }
 
 func signup(w http.ResponseWriter, req *http.Request) {
-	if alreadyLogedIn(req) {
+	if alreadyLogedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
@@ -98,9 +103,9 @@ func signup(w http.ResponseWriter, req *http.Request) {
 		f := req.FormValue("first")
 		l := req.FormValue("last")
 		p := req.FormValue("password")
-		hp, err  := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
+		hp, err := bcrypt.GenerateFromPassword([]byte(p), bcrypt.DefaultCost)
 		if err != nil {
-			http.Error(w, err.Error(),http.StatusInternalServerError)
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 		r := req.FormValue("role")
@@ -109,7 +114,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 		http.SetCookie(w, cookie)
-		dbSessions[cookie.Value] = un
+		dbSessions[cookie.Value] = session{un, time.Now()}
 		u = user{un, f, l, hp, r}
 		dbUsers[un] = u
 
@@ -125,7 +130,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 }
 
 func login(w http.ResponseWriter, req *http.Request) {
-	if alreadyLogedIn(req) {
+	if alreadyLogedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
 	}
@@ -135,32 +140,32 @@ func login(w http.ResponseWriter, req *http.Request) {
 
 		// does the user have an account?
 		un := req.FormValue("username")
-	    u, ok := dbUsers[un]
+		u, ok := dbUsers[un]
 		if !ok {
 			http.Error(w, "Unrecognised username or password", http.StatusForbidden)
 			return
 		}
 
 		// compare the encrypted password to the passed in password
-		pwd := req.FormValue("password") 
+		pwd := req.FormValue("password")
 		err := bcrypt.CompareHashAndPassword(u.Pwd, []byte(pwd))
 		if err != nil {
-			http.Error(w, "Unrecognised username or password", http.StatusForbidden)	
-			return 
+			http.Error(w, "Unrecognised username or password", http.StatusForbidden)
+			return
 		}
 
 		// create a session id sid.
 		cookie, err := newsSessionCookie()
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return 
+			return
 		}
 
 		// Set the cookie to the session id
 		http.SetCookie(w, cookie)
 
 		// update session table. map sid to user name.
-		dbSessions[cookie.Value] = un
+		dbSessions[cookie.Value] = session{un, time.Now()}
 
 		// Logged on. Go to the index.
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -175,11 +180,11 @@ func login(w http.ResponseWriter, req *http.Request) {
 }
 
 func logout(w http.ResponseWriter, req *http.Request) {
-	if !alreadyLogedIn(req) {
+	if !alreadyLogedIn(w, req) {
 		log.Println("Not logged in...")
 		// Not logged in so redirect somewhere else.
 		http.Redirect(w, req, "/", http.StatusSeeOther)
-		return 
+		return
 	}
 
 	log.Println("Logout...")
@@ -187,7 +192,9 @@ func logout(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		// This shouldnt really be here given we are per above logged in so a cookie must exist.
 		// We are still handling the error. But if we are here something is really wrong.
-		// Pehaps it may be better to throw a fatal error here.
+		// Pehaps it may be better to throw a fatal error here. Basically the observability api's
+		// you may have come in handy here to decide when to start cleaning. Remember in the real world this can while the 
+		// cleaning is runnign degrade performance  
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -205,13 +212,13 @@ func logout(w http.ResponseWriter, req *http.Request) {
 }
 
 func dump(w http.ResponseWriter, req *http.Request) {
-	u := getUser(req)
+	u := getUser(w, req)
 	if u.Role != RoleAdmin {
 		http.Error(w, "You must have admin priviliges to see the dump", http.StatusForbidden)
-		return 
+		return
 	}
 	d := struct {
-		DBSessions map[string]string
+		DBSessions map[string]session
 		DBUsers    map[string]user
 	}{
 		DBSessions: dbSessions,
@@ -224,6 +231,12 @@ func dump(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel() // On exit clean up.
+	go clean(ctx, chanClean)
+	go tick(ctx, chanClean)
+
 	http.HandleFunc("/", index)
 	http.HandleFunc("/bar", bar)
 	http.HandleFunc("/dump", dump)
@@ -233,3 +246,42 @@ func main() {
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
+
+func tick(ctx context.Context, out chan<- struct{}) {
+	// using a timer here. But in the real world shoudl be perhaps based on factors such as
+	// current system load, or the size of the dbsessions table or a certain window in which house 
+	// keeping can be done. It can be a combination of these. Your observability api's come in handy here.
+	ticker := time.NewTicker(time.Second* time.Duration(SessionLength * 4))
+	defer func() {
+		log.Println("Stopping ticker()..")
+		ticker.Stop()
+	}()
+
+	log.Println("tick() started...")
+	for {
+		select {
+		case <-ctx.Done():
+			return
+		case <-ticker.C:
+			out <- struct{}{}
+		}
+	}
+}
+
+func clean(ctx context.Context, in <-chan struct{}) {
+	log.Println("clean() started...")
+	for {
+		select {
+		case <-ctx.Done():
+			log.Println("Context done:", ctx.Err())
+			return
+		case <-in:
+			log.Println("Cleaning sessions..")
+			if time.Since(lastCleaned) >= time.Second*time.Duration(SessionLength) {
+				log.Println("#Sessionss cleaned: ", cleanDBSessions())
+				lastCleaned = time.Now()
+			}
+		}
+	}
+}
+
