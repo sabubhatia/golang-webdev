@@ -1,0 +1,12 @@
+[Unit]
+Description = Go Server
+
+[Service]
+ExecStart=/home/ubuntu/Applications/MyApp/myapp "./templates/*.gohtml"
+WorkingDirectory=/home/ubuntu/Applications/MyApp
+User=root
+Group=root
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

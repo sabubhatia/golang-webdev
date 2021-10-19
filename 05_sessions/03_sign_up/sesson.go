@@ -16,7 +16,7 @@ func newsSessionCookie() (*http.Cookie, error) {
 		Name:     "sid",
 		Value:    uid.String(),
 		Path:     "/",
-		Secure:   true,
+		Secure:   false,
 		HttpOnly: true,
 		MaxAge:   SessionLength,
 	}

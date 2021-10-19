@@ -5,12 +5,12 @@
         <title> Sign Up - Index </title>
     </head>
     <body>
-        {{if .First}}
-            First: {{.First}} <br>
-            Last: {{.Last}} <br>
-            Username: {{.Username}} <br>
-            Password: {{.Pwd}} <br>
-            Role: {{.Role}} <br>
+        {{if .U.First}}
+            First: {{.U.First}} <br>
+            Last: {{.U.Last}} <br>
+            Username: {{.U.Username}} <br>
+            Password: {{.U.Pwd}} <br>
+            Role: {{.U.Role}} <br>
             <br>
             <h2> <a href="/logout"> Logout </a> </h2>
         {{else}}
@@ -21,5 +21,7 @@
         <br>
         <h2> <a href="/bar"> Go to the bar </a> </h2>
         <h2> <a href="/dump"> Dump Data </a> </h2>
+        <br><br>
+        <i><b>OS:</b> {{.E.OS}}, <b>Arch:</b> {{.E.Arch}}, <b>CPU:</b> {{.E.Ncpu}} </i> <br>
     </body>
 </html>

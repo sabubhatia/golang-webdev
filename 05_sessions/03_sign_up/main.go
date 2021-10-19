@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"runtime"
 	"text/template"
 	"time"
 
@@ -24,12 +25,18 @@ type session struct {
 	lastActivity time.Time
 }
 
+type env struct {
+	OS string
+	Arch string
+	Ncpu int
+}
 var (
 	dbUsers     = map[string]user{}    // un->user
 	dbSessions  = map[string]session{} // sid->session
 	tpl         *template.Template
 	lastCleaned = time.Now()
 	chanClean   = make(chan struct{})
+	runEnv env = env{OS: runtime.GOOS, Arch:runtime.GOARCH, Ncpu: runtime.NumCPU(),}
 )
 
 const (
@@ -57,12 +64,23 @@ func init() {
 		log.Fatal("Expected at least 2 args. Got: ", len(os.Args))
 	}
 
+
+	log.Println("Args: ", os.Args[1])
 	tpl = template.Must(template.ParseGlob(os.Args[1]))
+	log.Println(tpl.DefinedTemplates())
 }
 
 func index(w http.ResponseWriter, req *http.Request) {
 	u := getUser(w, req)
-	err := tpl.ExecuteTemplate(w, "index.gohtml", u)
+	d := struct {
+		U user
+		E env
+	} {
+		U: u,
+		E: runEnv,
+	}
+
+	err := tpl.ExecuteTemplate(w, "index.gohtml", d)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -130,6 +148,7 @@ func signup(w http.ResponseWriter, req *http.Request) {
 }
 
 func login(w http.ResponseWriter, req *http.Request) {
+	log.Println("login()..")
 	if alreadyLogedIn(w, req) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 		return
@@ -146,6 +165,7 @@ func login(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
+		log.Println("Processing login()..", un)
 		// compare the encrypted password to the passed in password
 		pwd := req.FormValue("password")
 		err := bcrypt.CompareHashAndPassword(u.Pwd, []byte(pwd))
@@ -166,6 +186,7 @@ func login(w http.ResponseWriter, req *http.Request) {
 
 		// update session table. map sid to user name.
 		dbSessions[cookie.Value] = session{un, time.Now()}
+		log.Println("login() processed")
 
 		// Logged on. Go to the index.
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -244,7 +265,7 @@ func main() {
 	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/signup", signup)
 	http.Handle("/favicon.ico", http.NotFoundHandler())
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
 func tick(ctx context.Context, out chan<- struct{}) {
