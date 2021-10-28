@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Insert </title>
+    </head>
+    <body>
+        <form action="/insert" method="post">
+            <label for="name"> Enter Amigo's name: </label>
+            <input type="text" name="name" id="name"> <br>
+            <input type="submit" name="submit-btn" id="submit-btn" value="Insert"> <br>
+        </form>
+        <br>
+        <a href="/"> Home </a> <br>
+        {{template "footer" .M}}
+    </body>
+<html>

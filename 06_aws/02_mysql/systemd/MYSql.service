@@ -1,0 +1,12 @@
+Unit]
+Description = Go Server
+
+[Service]
+ExecStart=/home/ubuntu/Applications/MYSql/mysqltestAWS
+WorkingDirectory=/home/ubuntu/Applications/MYSql
+User=root
+Group=root
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

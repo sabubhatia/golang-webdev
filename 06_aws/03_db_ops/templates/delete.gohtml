@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Delete </title>
+    </head>
+    <body>
+        <h1> Delete an Amigo: </h1>
+        <form action="/delete" method="post">
+            <label for="name"> Amigo's name: </label>
+            <input type="text" name="name" id="name"> <br>
+            <input type="submit" name="submit-btn" id="submit-btn">
+        </form>
+        {{template "footer" .M}}
+    </body>
+</html>

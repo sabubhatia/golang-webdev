@@ -18,6 +18,7 @@ func init() {
 
 func foo(w http.ResponseWriter, req *http.Request) {
 	log.Println("Method in foo() is: ", req.Method)
+	log.Println("Your first name in foo() is: ", req.FormValue("first"))
 	log.Println("Your name in foo() is: ", req.FormValue("name"))
 }
 

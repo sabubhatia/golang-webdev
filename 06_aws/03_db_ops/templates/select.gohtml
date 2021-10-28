@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Select </title>
+    </head>
+    <body>
+        <h1> Results for query: <i>{{.Q}}</i> </h1>
+        {{$l := len .Sx}} 
+        {{if gt $l 0}}
+            <ul>
+                {{range $i, $v := .Sx}}
+                    <li> {{$v}} </li>
+                {{end}}
+            </ul>
+        {{else}}
+            <i> Returned no results </i><br>
+        {{end}}
+        <br>
+        <a href="/"> Home </a> <br>
+        {{template "footer" .M}}
+</html>
