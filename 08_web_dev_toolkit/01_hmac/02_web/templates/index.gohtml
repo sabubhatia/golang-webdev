@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> HMAC </title>
+    </head>
+    <body>
+        {{if .Value}}
+            <b><i> Current Cookie value is: {{.Value}} </i></b><br>
+        {{else}} 
+            <b><i> Current cookie is empty </i></b> <br>
+        {{end}}
+        <br>
+
+        <form action="/foo" method="post">
+            <label for="email"> Email: </label>
+            <input type="text" id="email" name="email" value="name@domain.com"> <br>
+            <input type="submit" id="submit-btn" name="submit-btn"> <br>
+        </form>
+
+        {{if .Value}}
+            <a href="/authenticate"> Validate this {{.Value}} </a> </br>
+        {{end}}
+
+    </body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Auth </title>
+    </head>
+    <body>
+    {{.}}
+        {{if .}}
+            <b> Email is authorized ! </b> <br>
+        {{else}}
+            <b><i> Email is NOT authorized </i>/b> <br>
+        {{end}}
+        <a href="/"> Home </a>
+    </body>
+</html>

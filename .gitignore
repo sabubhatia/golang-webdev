@@ -22,3 +22,7 @@ bin/**
 
 #mac utility files
 .DS_Store
+
+# security / ssl
+*.pem
+*.xxjson

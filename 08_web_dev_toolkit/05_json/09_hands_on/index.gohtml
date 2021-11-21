@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Json </title>
+    </head>
+    <body>
+        <script>
+            var d = status [
+                {
+                    "status": 200,
+                    "descrip": "OK"
+                },
+                {
+                    "status": 301,
+                    "descrip": "Moved permanently"
+                },
+                {
+                    "status": 302,
+                    "descrip": "Found"
+                },
+                {
+                    "status": 303,
+                    "descrip": "See other"
+                },
+                {
+                    "status": 307,
+                    "descrip": "Temporary redirect"
+                },
+                {
+                    "status": 400,
+                    "descrip": "Bad request"
+                },
+                {
+                    "status": 401,
+                    "descrip": "Unauthorized"
+                },
+                {
+                    "status": 402,
+                    "descrip": "Payment required"
+                },
+
+                {
+                    "status": 403,
+                    "descrip": "Forbidden" 
+                }
+            ];
+            var transmit = JSON.stringify(d)
+            document.write(transmit)
+        </script>
+    </body>
+</html>
