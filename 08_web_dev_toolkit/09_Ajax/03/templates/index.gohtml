@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Index </title>
+    </head>
+    <body>
+        {{if .Un}}
+            {{.Un}}, {{.Sid}}, {{.La}} <br>
+            <a href="/bar"> Bar </a> <br>
+            <a href="/logout"> Logout </a> <br>
+        {{else}}
+            <a href="/login"> Login </a> <br>
+            <a href="/signUp"> Sign Up </a> <br>
+        {{end}}
+    </body>
+</html>

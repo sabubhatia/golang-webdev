@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title> Ajax-GO </title>
+        <style>
+            body {
+              height: 100vh;
+             display: flex;
+             justify-content: center;
+             align-items: center;
+            }
+            h1 {
+                font-size: 5vw;
+                cursor: pointer;
+                text-decoration: underline;
+            }
+            h2 {
+                font-size: 5vw;
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <h1> Make a request </h1> <br> <br>
+
+        <script>
+            document.querySelector('h1').onclick = makeRequest;
+
+            function makeRequest() {
+
+                // create a  XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+
+                // open the request
+                xhr.open('GET', '/Users/sabubhatia/go/src/github.com/sabubhatia/golang-webdev/08_web_dev_toolkit/09_Ajax/01/test.html', true);
+
+                // handles the response
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200){
+                        alert(xhr.responseText);
+                        alert(xhr.status);
+                    }
+                };
+
+                // send the request
+                xhr.send();
+            }
+
+        </script>
+
+        <h2> Make a request Foo </h2> <br> <br>
+        <script>
+            document.querySelector('h2).onclick = makeRequestFoo;
+
+            function makeRequestFoo() {
+
+                // create a  XMLHttpRequest
+                var xhr = new XMLHttpRequest();
+
+                // open the request
+                xhr.open('GET', '/foo');
+
+                // handles the response
+                xhr.onreadystatechange = function () {
+                    if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200){
+                        alert(xhr.responseText);
+                    }
+                };
+
+                // send the request
+                xhr.send();
+            }
+
+        </script>       
+    </body>
+</html>
