@@ -1,0 +1,2 @@
+# This file builds an image that runs curl.
+FROM golang:onbuild
